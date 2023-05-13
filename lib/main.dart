@@ -1,9 +1,40 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:developer' as developer;
 
 void main() {
   runApp(const MyApp());
+}
+
+class ActivityModel {
+  String id;
+  String nama;
+  String jenis;
+  ActivityModel(
+      {required this.id,
+        required this.nama,
+        required this.jenis});
+}
+
+class ActivityCubit extends Cubit<List<ActivityModel>> {
+  String url = "http://178.128.17.76:8000/daftar_umkm";
+  ActivityCubit() : super([]);
+
+  List<ActivityModel> ListActivityModel = <ActivityModel>[];
+
+  void setFromJson(Map<String, dynamic> json) {
+    var data = json["data"];
+    for (var val in data) {
+      String nama = val['nama'];
+      String jenis = val['jenis'];
+      String id = val['id'];
+
+      ListActivityModel.add(ActivityModel(nama: nama, jenis: jenis, id: id));
+    }
+    emit(ListActivityModel);
+  }
 }
 
 
@@ -54,7 +85,7 @@ class MyAppState extends State<MyApp> {
     pinjaman.add(itm4);
 
     return MaterialApp(
-      title: 'Hello App',
+      title: 'Quiz 3 Promvis',
       home: Scaffold(
         appBar: AppBar(
             title: Text('My App P2P')),
